@@ -39,11 +39,13 @@ This differs from the [main QMK firmware repo](https://github.com/qmk/qmk_firmwa
 
 ## Custom Trackball Functionality
 
-This fork adds specialized trackball controls for the Ploopy Nano 2:
+This fork adds specialized trackball controls for the Ploopy Nano 2. The device has a single physical button mapped at matrix position `(0, 0)` (defined in `keyboards/ploopyco/nano_2/info.json`). The button is mapped to `QK_MOUSE_BUTTON_1` (left mouse click) in `keyboards/ploopyco/nano_2/keymaps/default/keymap.c`.
 
-- **Left Button Click**: Standard click functionality
-- **Left Button Hold**: Extended hold detection for special actions
-- **Wiggle Toggle**: Toggle between mouse movement mode and scrolling mode
+**Left Button Click**: When the button is pressed, the key event flows through QMK's tapping system in `quantum/action_tapping.c`, which distinguishes between a quick tap and a hold based on `TAPPING_TERM`. On press, `process_action()` in `quantum/action.c` routes the keycode to `pointing_device_keycode_handler()` in `quantum/pointing_device/pointing_device.c:574`, which sets the appropriate button bit via `pointing_device_handle_buttons()` and sends the updated mouse report.
+
+**Left Button Hold & Wiggle Toggle**: The hold detection is handled by QMK's action tapping subsystem (`quantum/action_tapping.c`), which tracks how long a key is held before another key is pressed. The wiggle toggle (between mouse movement and scroll modes) is implemented in the user keymap at `keyboards/ploopyco/nano_2/keymaps/default/keymap.c` in `pointing_device_task_user()`, which detects right/left wiggle gestures on the trackball and toggles `scrolling_mode` after 3+ wiggles.
+
+**Adding a right-click on long press**: To add a new behavior like right-click on long press, you would intercept the hold action in your keymap's `process_record_user()` (in `keymap.c`) or override `pointing_device_keycode_handler()` in `quantum/pointing_device/pointing_device.c:574`. For example, you could detect a long-press event (using the hold/tap distinction from the tapping subsystem) and call `pointing_device_handle_buttons()` with button index `1` for right-click (bit `0x02` in the mouse report) instead of the standard left-click.
 
 ## Credits
 
