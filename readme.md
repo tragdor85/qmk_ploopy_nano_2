@@ -19,6 +19,24 @@ When successful, this creates `ploopyco_nano_2_rev2_003_default.uf2` in the `.bu
 
 See the [official programming instructions](https://ploopyco.github.io/nano-2-trackball/appendices/programming/) for more details.
 
+## DPI Configuration
+
+The Ploopy Nano 2 only has one physical button, so there is no way to cycle DPI through the hardware. The trackball DPI is set to `1600` by default. To change it, edit the DPI options in code before flashing:
+
+1. Open `keyboards/ploopyco/ploopyco.c`
+2. Find the `PLOOPY_DPI_OPTIONS` define (line 39) and change the values
+3. Update `PLOOPY_DPI_DEFAULT` to point to the correct index (0-based) in the options array
+4. Build and flash the firmware as described above
+
+For example:
+
+```c
+#define PLOOPY_DPI_OPTIONS { 800, 1600, 3200 }
+#define PLOOPY_DPI_DEFAULT 1
+```
+
+This differs from the [main QMK firmware repo](https://github.com/qmk/qmk_firmware) where most devices with trackballs have a `DPI_CONFIG` keycode mapped to a physical button, allowing you to cycle DPI on the fly. In this fork, since the Nano 2 has only one button (which handles mouse clicks), there is no dedicated button for DPI cycling. If you wanted to add on-the-fly DPI cycling, you could map `DPI_CONFIG` to the left button combined with a long press or some other gesture, but it would require firmware changes.
+
 ## Custom Trackball Functionality
 
 This fork adds specialized trackball controls for the Ploopy Nano 2:

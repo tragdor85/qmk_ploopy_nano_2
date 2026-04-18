@@ -18,18 +18,14 @@ There are a number of behavioral settings that you can use to help customize you
 
 ## DPI
 
-You can change the DPI/CPI or speed of the trackball by calling `pointing_device_set_cpi` at any time. Additionally, there is a `DPI_CONFIG` macro that will cycle through an array of options for the DPI.  This is set to 1200, 1600, and 2400, but can be changed.  1600 is also set to the default.
-
-To configure/set your own array, there are two defines to use, `PLOOPY_DPI_OPTIONS` to set the array, and `PLOOPY_DPI_DEFAULT`.
+The default DPI is set to `1600`. If your device has a button mapped to `DPI_CONFIG`, you can cycle through the available DPI options. To change the DPI values, define `PLOOPY_DPI_OPTIONS` and `PLOOPY_DPI_DEFAULT` in your keymap's `config.h` before including the keyboard:
 
 ```c
-#define PLOOPY_DPI_OPTIONS { 1200, 1600, 2400 }
-#define PLOOPY_DPI_DEFAULT 1
+#define PLOOPY_DPI_OPTIONS { 1600 }
+#define PLOOPY_DPI_DEFAULT 0
 ```
 
-The `PLOOPY_DPI_OPTIONS` array sets the values that you want to be able to cycle through, and the order they are in.  The "default" define lets the firmware know which of these options is the default and should be loaded by default.
-
-The `DPI_CONFIG` macro will cycle through the values in the array, each time you hit it.  And it stores this value in persistent memory, so it will load it the next time the device powers up.
+The `PLOOPY_DPI_OPTIONS` array sets the DPI values you can cycle through and their order. The `PLOOPY_DPI_DEFAULT` defines which index (0-based) is used on first boot. If your keyboard lacks a `DPI_CONFIG` button, you must change the DPI by updating this code and reflashing the firmware.
 
 ## Drag Scroll
 
