@@ -1,4 +1,4 @@
-# QMK Firmware - Ploopy Nano Fork
+# QMK Firmware - Ploopy Nano 2 Fork
 
 This is a fork of [qmk_firmware](https://github.com/qmk/qmk_firmware) that only supports the Ploopy Nano 2 trackball.
 
